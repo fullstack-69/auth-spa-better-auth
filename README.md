@@ -1,0 +1,1 @@
+# Auth SPA - Better-Auth
