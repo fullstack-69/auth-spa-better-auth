@@ -9,7 +9,8 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@db/*": ["./db/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["./*", "./src/**/*", "./db/**/*"]

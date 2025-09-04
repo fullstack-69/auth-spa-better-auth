@@ -3,6 +3,7 @@ import Debug from "debug";
 import express from "express";
 import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
 import { auth } from "@lib/auth.js";
+import { PORT } from "@utils/env.js";
 
 const debug = Debug("fs-auth:index");
 const app = express();
@@ -110,7 +111,6 @@ app.post("/signup", async function (req, res, next) {
 });
 
 // * Running app
-const PORT = process.env.BACKEND_PORT || "5001";
 app.listen(PORT, async () => {
   debug(`Listening on port ${PORT}: http://localhost:${PORT}`);
 });
