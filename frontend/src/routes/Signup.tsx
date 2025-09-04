@@ -31,7 +31,7 @@ const Signup: FC = () => {
         },
         onSuccess: (ctx) => {
           alert("Registering Successfully");
-          navigate("/login");
+          navigate("/");
         },
         onError: (ctx) => {
           alert(ctx.error.message);

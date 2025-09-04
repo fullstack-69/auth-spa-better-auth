@@ -1,43 +1,34 @@
-import { dbClient, dbConn } from "@db/client.js";
-// import { usersTable } from "@db/schema.js";
-// import bcrypt from "bcrypt";
+import { auth } from "@lib/auth.js";
 
-// const saltRounds = 10;
-// const password = "1234";
+const password = "1234";
 
-// async function insertData() {
-//   bcrypt.hash(password, saltRounds, async function (err, hash) {
-//     const results = await dbClient
-//       .insert(usersTable)
-//       .values([
-//         {
-//           name: "Admin User",
-//           email: "admin@cmu.com",
-//           isAdmin: true,
-//           password: hash,
-//           avatarURL: "logos/robot.png",
-//         },
-//         {
-//           name: "Regular User",
-//           email: "user@cmu.com",
-//           isAdmin: false,
-//           password: hash,
-//           avatarURL: "logos/robot.png",
-//         },
-//         {
-//           name: "Nirand Pisutha-Arnond",
-//           email: "nnnpooh@gmail.com",
-//           isAdmin: true,
-//           password: hash,
-//           avatarURL: "logos/robot.png",
-//         },
-//       ])
-//       .returning({ id: usersTable.id });
+async function seed() {
+  await auth.api.signUpEmail({
+    body: {
+      name: "Admin User",
+      email: "admin@cmu.com",
+      password: password,
+      image: "logos/robot.png",
+    },
+  });
 
-//     // console.log(results);
+  await auth.api.signUpEmail({
+    body: {
+      name: "Regular User",
+      email: "user@cmu.com",
+      password: password,
+      image: "logos/robot.png",
+    },
+  });
 
-//     dbConn.close();
-//   });
-// }
+  // If I seed this account, I don't get GitHub avatar when I use OAuth.
+  //   await auth.api.signUpEmail({
+  //     body: {
+  //       name: "Nirand Pisutha-Arnond",
+  //       email: "nnnpooh@gmail.com",
+  //       password: password,
+  //     },
+  //   });
+}
 
-// insertData();
+seed();

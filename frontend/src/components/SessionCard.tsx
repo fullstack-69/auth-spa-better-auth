@@ -1,8 +1,5 @@
 import { type FC } from "react";
-import { type Session, type User } from "../lib/auth-client";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import useAuth from "../hooks/useAuth";
+import { type Session } from "../lib/auth-client";
 import { UAParser } from "ua-parser-js";
 
 interface Props {
@@ -10,8 +7,6 @@ interface Props {
 }
 
 const SessionCard: FC<Props> = ({ sessions }) => {
-  console.log({ sessions });
-
   if (!sessions) return <></>;
   return (
     <article>
