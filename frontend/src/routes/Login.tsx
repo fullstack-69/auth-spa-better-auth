@@ -33,6 +33,13 @@ const Login: FC = () => {
     console.log({ res });
   }
 
+  const signInGitHub = async () => {
+    const data = await authClient.signIn.social({
+      provider: "github",
+    });
+    console.log({ data });
+  };
+
   return (
     <>
       <h1>Credential Login</h1>
@@ -58,7 +65,7 @@ const Login: FC = () => {
       <h1>Social Login</h1>
       <article>
         <div style={{ display: "flex", gap: "2rem" }}></div>
-        <a href="/api/login/oauth/github">
+        <a href="#" onClick={signInGitHub}>
           <svg width="90" height="90">
             <image
               xlinkHref="logos/github-mark-white.svg"

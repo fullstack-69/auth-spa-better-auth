@@ -1,102 +1,51 @@
 import { type FC } from "react";
-import { type Session, type User } from "../types/api";
+import { type Session, type User } from "../lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import { UAParser } from "ua-parser-js";
+
 interface Props {
   sessions: Session[] | undefined;
 }
 
 const SessionCard: FC<Props> = ({ sessions }) => {
+  console.log({ sessions });
+
   if (!sessions) return <></>;
   return (
     <article>
       <h3>Sessions</h3>
       <ul>
         {sessions.map((session) => {
+          const ua = UAParser(session.userAgent ?? "");
+          console.log({ ua });
           return (
-            <li key={session.sid}>
+            <li key={session.id}>
               <div className="session-list-wrapper">
                 {/* Computer */}
                 <span className="session-list-item">
                   <i className="fa-solid fa-lg fa-computer" />
-                  <span>{`${session.useragentStr}`}</span>
+                  <span>{`${ua.os.name ?? "Unknown"}`}</span>
                 </span>
+
+                {/* Computer */}
+                <span className="session-list-item">
+                  <i className="fa-solid fa-lg fa-window-restore" />
+                  <span>{`${ua.browser.name ?? "Unknown"}`}</span>
+                </span>
+
                 {/* Calendar */}
                 <span className="session-list-item">
                   <i className="fa-solid fa-lg fa-calendar-plus" />
-                  <span>{`${session.createdAtStr}`}</span>
+                  <span>{`${session.createdAt.toLocaleDateString()} ${session.createdAt.toLocaleTimeString()}`}</span>
                 </span>
-                {/* Login Type */}
-                <LoginType loginType={session.loginType} />
-                {/* Own Session */}
-                {!session.isOwnSession ? (
-                  <ButtonDeleteSession sid={session.sid} />
-                ) : (
-                  <em>(This Device)</em>
-                )}
               </div>
             </li>
           );
         })}
       </ul>
     </article>
-  );
-};
-
-const LoginType: FC<{ loginType: string }> = ({ loginType }) => {
-  if (loginType === "CREDENTIAL") {
-    return (
-      <span className="session-list-item">
-        <i className="fa-solid fa-lg fa-key" />
-        <span>Credential Login</span>
-      </span>
-    );
-  } else if (loginType === "GITHUB") {
-    return (
-      <span className="session-list-item">
-        <i className="fa-brands fa-lg fa-github" />
-        <span>Github Login</span>
-      </span>
-    );
-  } else if (loginType === "GOOGLE") {
-    return (
-      <span className="session-list-item">
-        <i className="fa-brands fa-lg fa-google" />
-        <span>Google Login</span>
-      </span>
-    );
-  } else {
-    return <em>Unknown Login</em>;
-  }
-};
-
-const ButtonDeleteSession: FC<{ sid: string }> = ({ sid }) => {
-  const { refetch } = useAuth();
-  const mutation = useMutation({
-    mutationFn: (sid: string) =>
-      axios({
-        method: "delete",
-        url: "/api/session",
-        params: {
-          sid,
-        },
-      }),
-    onSuccess: () => {
-      refetch();
-    },
-    onError: (err) => {
-      alert(err);
-    },
-  });
-
-  return (
-    <span className="session-list-bin">
-      <i
-        className="fa-solid fa-lg fa-trash-can"
-        onClick={() => mutation.mutate(sid)}
-      />
-    </span>
   );
 };
 

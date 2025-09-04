@@ -1,6 +1,8 @@
 import { type FC } from "react";
+import { type User } from "../lib/auth-client";
+
 interface Props {
-  user: any | null | undefined;
+  user: User | null | undefined;
 }
 
 const UserCard: FC<Props> = ({ user }) => {
