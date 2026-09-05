@@ -4,8 +4,8 @@
     "@tsconfig/node-ts/tsconfig.json"
   ],
   "compilerOptions": {
+    "rootDir": ".",
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
       "@src/*": ["./src/*"],
       "@db/*": ["./db/*"],
