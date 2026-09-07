@@ -1,11 +1,11 @@
-import { type FC, type FormEvent } from "react";
+import { type FC, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
 import { authClient } from "../lib/auth-client";
 
 const Login: FC = () => {
   const navigate = useNavigate();
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const data = Object.fromEntries(new FormData(form).entries()); // https://medium.com/@hayavuk/react-forms-d49ec73cc84a
@@ -28,7 +28,7 @@ const Login: FC = () => {
         onError: (ctx) => {
           alert(ctx.error.message);
         },
-      }
+      },
     );
     console.log({ res });
   }
@@ -38,6 +38,27 @@ const Login: FC = () => {
       provider: "github",
     });
     console.log({ data });
+  };
+
+  const signInWebAuthn = async () => {
+    const { data, error } = await authClient.signIn.passkey({
+      autoFill: false,
+      returnWebAuthnResponse: true,
+      fetchOptions: {
+        onSuccess(context) {
+          console.log("Authentication successful:", context.data);
+          window.location.href = "/";
+        },
+        onError(context) {
+          console.error("Authentication failed:", context.error.message);
+        },
+      },
+    });
+    if (error) {
+      console.error("Error signing in with WebAuthn:", error);
+    } else {
+      console.log("Signed in with WebAuthn successfully:", data);
+    }
   };
 
   return (
@@ -64,7 +85,6 @@ const Login: FC = () => {
       </article>
       <h1>Social Login</h1>
       <article>
-        <div style={{ display: "flex", gap: "2rem" }}></div>
         <a href="#" onClick={signInGitHub}>
           <svg width="90" height="90">
             <image
@@ -74,6 +94,10 @@ const Login: FC = () => {
             />
           </svg>
         </a>
+      </article>
+      <h1>WebAuthn</h1>
+      <article>
+        <button onClick={signInWebAuthn}>Use Passkey</button>
       </article>
     </>
   );

@@ -1,24 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "../lib/auth-client";
-function getMe() {
-  return authClient.getSession();
+function getPasskeys() {
+  return authClient.passkey.listUserPasskeys();
 }
 
-function useAuth() {
+function usePasskey() {
   // Queries
   const { data, error, refetch } = useQuery({
-    queryKey: ["auth"],
-    queryFn: getMe,
+    queryKey: ["passkey"],
+    queryFn: getPasskeys,
     select: (dataInput) => {
       return dataInput.data;
     },
   });
   return {
-    user: data?.user,
-    sessions: data?.session ? [data.session] : [],
+    data,
     error,
     refetch,
   };
 }
 
-export default useAuth;
+export default usePasskey;

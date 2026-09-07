@@ -14,7 +14,7 @@ const SessionCard: FC<Props> = ({ sessions }) => {
       <ul>
         {sessions.map((session) => {
           const ua = UAParser(session.userAgent ?? "");
-          console.log({ ua });
+          // console.log({ ua });
           return (
             <li key={session.id}>
               <div className="session-list-wrapper">

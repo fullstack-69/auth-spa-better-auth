@@ -1,10 +1,10 @@
-import { type FC, type FormEvent } from "react";
+import { type FC, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
 import { authClient } from "../lib/auth-client";
 const Signup: FC = () => {
   const navigate = useNavigate();
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const data = Object.fromEntries(new FormData(form).entries()); // https://medium.com/@hayavuk/react-forms-d49ec73cc84a
@@ -36,7 +36,7 @@ const Signup: FC = () => {
         onError: (ctx) => {
           alert(ctx.error.message);
         },
-      }
+      },
     );
     console.log({ res });
   }

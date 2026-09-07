@@ -1,7 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { dbClient } from "../../db/client.js"; // your drizzle instance
-import { github as gh } from "../utils/env.js";
+import { github as gh, PORT } from "../utils/env.js";
+import { passkey } from "@better-auth/passkey";
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbClient, {
@@ -32,4 +33,11 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: ["*"],
+  plugins: [
+    passkey({
+      rpID: "localhost", // Use your domain in production, e.g., 'example.com'
+      rpName: "Better Auth Passkey", // Human-readable title shown during the passkey prompt
+      origin: `http://localhost:5173`, // Expected origin URL. Notice that this is the frontend URL, not the backend URL. In production, it should be your frontend domain.
+    }),
+  ],
 });
